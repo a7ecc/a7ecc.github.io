@@ -1,0 +1,14 @@
+@echo off
+if not "%1"=="am_admin" (powershell start -verb runas '%0' am_admin & exit /b)
+if exist '%temp%\Setup_Android.zip' del '%temp%\Setup_Android.zip'
+echo %systemdrive%\android| clip
+if exist "%systemdrive%\android" exit
+md "%systemdrive%\android"
+powershell -command "Invoke-WebRequest -URI https://github.com/a7ecc/setup-android/raw/main/Android.zip -OutFile '%temp%\Setup_Android.zip'"
+powershell -command "Expand-Archive '%temp%\Setup_Android.zip' -DestinationPath '%systemdrive%\'"
+del "%temp%\Setup_Android.zip"
+echo @echo off > "%systemdrive%\Android\Android.bat"
+echo "%systemdrive%\Android\adb.exe" connect 127.0.0.1:58526 >> "%systemdrive%\Android\Android.bat"
+echo "%systemdrive%\Android\adb.exe" install "%%1" >> "%systemdrive%\Android\Android.bat"
+echo if %ERRORLEVEL% EQU 1 (powershell -command "$ErrorActionPreference = 'Stop'; $notificationTitle = 'Installation failed'; [Windows.UI.Notifications.ToastNotificationManager, Windows.UI.Notifications, ContentType = WindowsRuntime] > $null; $template = [Windows.UI.Notifications.ToastNotificationManager]::GetTemplateContent([Windows.UI.Notifications.ToastTemplateType]::ToastText01); $toastXml = [xml] $template.GetXml(); $toastXml.GetElementsByTagName('text').AppendChild($toastXml.CreateTextNode($notificationTitle)) > $null; $xml = New-Object Windows.Data.Xml.Dom.XmlDocument; $xml.LoadXml($toastXml.OuterXml); $toast = [Windows.UI.Notifications.ToastNotification]::new($xml); $toast.Tag = 'Test1'; $toast.Group = 'Test2'; $toast.ExpirationTime = [DateTimeOffset]::Now.AddSeconds(5); $notifier = [Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier(' Download Android Apps'); $notifier.Show($toast);exit") else (powershell -command "$ErrorActionPreference = 'Stop'; $notificationTitle = 'Installed successfully'; [Windows.UI.Notifications.ToastNotificationManager, Windows.UI.Notifications, ContentType = WindowsRuntime] > $null; $template = [Windows.UI.Notifications.ToastNotificationManager]::GetTemplateContent([Windows.UI.Notifications.ToastTemplateType]::ToastText01); $toastXml = [xml] $template.GetXml(); $toastXml.GetElementsByTagName('text').AppendChild($toastXml.CreateTextNode($notificationTitle)) > $null; $xml = New-Object Windows.Data.Xml.Dom.XmlDocument; $xml.LoadXml($toastXml.OuterXml); $toast = [Windows.UI.Notifications.ToastNotification]::new($xml); $toast.Tag = 'Test1'; $toast.Group = 'Test2'; $toast.ExpirationTime = [DateTimeOffset]::Now.AddSeconds(5); $notifier = [Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier(' Download Android Apps'); $notifier.Show($toast);exit") >> "%systemdrive%\Android\Android.bat"
+start ms-windows-store://pdp/?ProductId=9P3395VX91NR
